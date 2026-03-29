@@ -17,7 +17,7 @@ var (
 		"Ready",         // handed over to customer
 	}
 
-	VehicleModels = []string{
+	VehicleTypes = []string{
 		// Scooters
 		"Access 125",
 		"Avenis 125",
@@ -58,17 +58,17 @@ type VehicleModel struct {
 }
 
 type Vehicle struct {
-	ID           string             `gorm:"primaryKey; size:14" json:"id"`
-	Status       string             `gorm:"not null" json:"status"`
-	CustomerName string             `gorm:"not null" json:"customerName"`
-	Phone        string             `gorm:"not null" json:"phone"`
-	Address      string             `gorm:"not null" json:"address"`
-	Items        []VehicleIssueItem `gorm:"foreignKey:ServiceID" json:"items"`
-	createdAt    time.Time          `json:"createdAt"`
-	ChasisNumber string             `gorm:"not null" json:"chasisNumber"`
+	ID           string        `gorm:"primaryKey; size:14" json:"id"`
+	Status       string        `gorm:"not null" json:"status"`
+	CustomerName string        `gorm:"not null" json:"customerName"`
+	Phone        string        `gorm:"not null" json:"phone"`
+	Address      string        `gorm:"not null" json:"address"`
+	Items        []VehicleItem `gorm:"foreignKey:ServiceID" json:"items"`
+	createdAt    time.Time     `json:"createdAt"`
+	ChasisNumber string        `gorm:"not null" json:"chasisNumber"`
 }
 
-type VehicleIssueItem struct {
+type VehicleItem struct {
 	ID             string `gorm:"primaryKey; size:14" json:"id"`
 	ServiceId      string `gorm:"index;size:14;not null" json:"serviceId"`
 	Issue          string `gorm:"not null" json:"issue"`
@@ -85,7 +85,7 @@ func (v *Vehicle) BeforeCreate(ctx *gorm.DB) error {
 	return nil
 }
 
-func (vi *VehicleIssueItem) BeforeCreate(ctx *gorm.DB) error {
+func (vi *VehicleItem) BeforeCreate(ctx *gorm.DB) error {
 	if vi.ID == "" {
 		vi.ID = shortid.MustGenerate()
 	}

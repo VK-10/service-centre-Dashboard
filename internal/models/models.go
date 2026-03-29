@@ -11,19 +11,19 @@ type DBModel struct {
 	Vehicle VehicleModel
 }
 
-func Init(dataSourceName string) (*DBModel, error) {
+func InitDB(dataSourceName string) (*DBModel, error) {
 	db, err := gorm.Open(sqlite.Open(dataSourceName), &gorm.Config{})
 
 	if err != nil {
 		return nil, fmt.Errorf("Failed to migrate database: %v", err)
 	}
-	err = db.AutoMigrate(&Vehicle{}, &VehicleIssueItem{})
+	err = db.AutoMigrate(&Vehicle{}, &VehicleItem{})
 	if err != nil {
-		return nil, fmt.Errorf("Faield t o migrate databse %v", err)
+		return nil, fmt.Errorf("Failed to migrate database: %v", err)
 
 	}
 
-	dbModel = &DBModel{
+	dbModel := &DBModel{
 		Vehicle: VehicleModel{DB: db},
 	}
 

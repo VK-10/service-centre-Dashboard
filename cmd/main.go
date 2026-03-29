@@ -3,6 +3,7 @@ package main
 import (
 	"log/slog"
 	"os"
+	"service-tracker-go/internal/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,10 +11,10 @@ import (
 func main() {
 	config := loadConfig()
 
-	logger := slog.New(slog.newTextHandler(os.Stdout, nil))
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
-	dbModel, err := models.InitDB(cfg.DBPath)
+	dbModel, err := models.InitDB(config.DbPath)
 	if err != nil {
 		slog.Error("Failed to initialize database", "error", err)
 		os.Exit(1)
@@ -34,7 +35,7 @@ func main() {
 	}
 
 	setUpRoutes(router, h)
-	slog.Info("Starting server on port", "port", cfg.Port)
+	slog.Info("Starting server on port", "port", config.Port)
 
-	router.Run(":" + cfg.Port)
+	router.Run(":" + config.Port)
 }

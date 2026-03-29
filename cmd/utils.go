@@ -1,37 +1,44 @@
 package main
 
-type Config struct {
-	Post string
-	DBPath string
+import (
+	"html/template"
+	"os"
 
+	"github.com/gin-gonic/gin"
+)
+
+type Config struct {
+	Port   string
+	DbPath string
 }
 
 func loadConfig() Config {
-	return Config {
-		Port : getenv("PORT", "8080")
-		DbPath: getEnv("DATABASE_URL", "./data/vehicles.db")
+	return Config{
+		Port:   getEnv("PORT", "8080"),
+		DbPath: getEnv("DATABASE_URL", "./data/vehicles.db"),
 	}
 }
 
-func getEnv(key, defaultValue string) string{
+func getEnv(key, defaultValue string) string {
 	if value := os.Getenv(key); value != "" {
-
+		return value
 	}
 
 	return defaultValue
 }
 
-func loadTemplates(router *gin.Engine) error {
-	functions := template.Funcmap {
-		"add" func(a, b int) int { return a + b},
-
+func Loadtemplates(router *gin.Engine) error {
+	functions := template.FuncMap{
+		"add": func(a, b int) int {
+			return a + b
+		},
 	}
 
-	templ , err := template.New("").Funcs(functions).ParseGlob("templates/*.tmpl")
+	templ, err := template.New("").Funcs(functions).ParseGlob("templates/*.tmpl")
 	if err != nil {
 		return err
 	}
 
-	router.setHTMLTemplate(templ)
+	router.SetHTMLTemplate(templ)
 	return nil
 }

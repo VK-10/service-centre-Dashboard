@@ -1,0 +1,93 @@
+{{template "top" .}}
+    <title>New Vehicle-Service Order</title>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 min-h-screen">
+<div class="flex items-center justify-center p-6 md:p-8">
+  <div class="bg-white/80 backdrop-blur-sm p-8 md:p-10 rounded-3xl shadow-xl border border-white/20 max-w-2xl w-full">
+    <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center tracking-tight">New Vehicle-Service Order</h1>
+
+    <form action="/new-vehicle" method="POST" class="space-y-6">
+      <div class="space-y-5">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Customer Information</h2>
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-2" for="name">Name</label>
+          <input type="text" id="name" name="name" required minlength="2" maxlength="100" class="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all">
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-2" for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" required minlength="10" maxlength="20" class="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all">
+        </div>
+        <div>
+          <label class="block text-gray-700 text-sm font-medium mb-2" for="address">Address</label>
+          <input type="text" id="address" name="address" required minlength="5" maxlength="200" class="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all">
+        </div>
+      </div>
+
+      <div class="space-y-5">
+        <div class="flex justify-between items-center">
+          <h2 class="text-xl font-semibold text-gray-800">Vehicles</h2>
+          <button type="button" onclick="addVehicle()" class="px-4 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 border border-emerald-300 rounded-xl hover:border-emerald-400 hover:bg-emerald-50 active:scale-95 transition-all">Add Another Vehicle</button>
+        </div>
+        <div id="vehicles" class="space-y-4"></div>
+      </div>
+
+      <button type="submit" class="w-full bg-emerald-500 text-white font-semibold py-3 px-3 rounded-xl hover:bg-emerald-600 active:scale-[0.99] transition-all shadow-lg shadow-emerald-500/30">Place Order</button>
+    </form>
+  </div>
+</div>
+
+<template id="vehicleTemplate">
+  <div class="vehicle-item border border-gray-200 rounded-2xl p-5 bg-gray-50/50">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-gray-800">Vehicle #<span class="vehicle-number"></span></h3>
+      <button type="button" onclick="removeVehicle(this)" class="text-red-500 hover:text-red-700 font-medium text-sm transition-colors">Remove</button>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-medium mb-2">Size</label>
+        <select name="issues" required class="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all bg-white">
+          {{range $.VehicleIssues}}
+          <option value="{{.}}">{{.}}</option>
+          {{end}}
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-medium mb-2">Vehicle Type</label>
+        <select name="vehicle_types" required class="w-full p-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all bg-white">
+          {{range $.VehicleTypes}}
+          <option value="{{.}}">{{.}}</option>
+          {{end}}
+        </select>
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-medium mb-2">Special Instructions</label>
+        <textarea maxlength="200" name="instructions" rows="2" class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent transition-all resize-none"></textarea>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  let vehicleCount = 0;
+
+  function addVehicle() {
+    const clone = document.getElementById('vehicleTemplate').content.cloneNode(true);
+    clone.querySelector('.vehicle-number').textContent = ++vehicleCount;
+    document.getElementById('vehicles').appendChild(clone);
+  }
+
+  function removeVehicle(btn) {
+    btn.closest('.vehicle-item').remove();
+
+    document.querySelectorAll('.vehicle-item').forEach((item, index) => {
+      item.querySelector('.vehicle-number').textContent = index + 1;
+    });
+
+    vehicleCount = document.querySelectorAll('.vehicle-item').length;
+  }
+
+  // Add one vehicle by default when page loads
+  addVehicle();
+</script>
+
+{{template "bottom" .}}

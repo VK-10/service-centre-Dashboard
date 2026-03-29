@@ -3,9 +3,9 @@ package main
 import "github.com/gin-gonic/gin"
 
 func setUpRoutes(router *gin.Engine, handler *Handler) {
-	router.GET("/", handler.ServeNewOrderForm)
-	router.POST("/new-service", handler.HandleNewVehiclePost)
-	router.GET("/customers", handler.HandleGetCustomers)
+	router.GET("/", handler.ServeNewVehicleForm)
+	router.POST("/new-vehicle", handler.HandleNewVehiclePost)
+	router.GET("/customers/:id", handler.serveCustomer)
 
-	router.Static("/static", "./template/static")
+	router.Static("/static", "./templates/static")
 }
