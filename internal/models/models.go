@@ -9,6 +9,8 @@ import (
 
 type DBModel struct {
 	Vehicle VehicleModel
+	User    UserModel
+	DB      *gorm.DB
 }
 
 func InitDB(dataSourceName string) (*DBModel, error) {
@@ -17,7 +19,7 @@ func InitDB(dataSourceName string) (*DBModel, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Failed to migrate database: %v", err)
 	}
-	err = db.AutoMigrate(&Vehicle{}, &VehicleItem{})
+	err = db.AutoMigrate(&Vehicle{}, &VehicleItem{}, &User{})
 	if err != nil {
 		return nil, fmt.Errorf("Failed to migrate database: %v", err)
 
@@ -25,6 +27,8 @@ func InitDB(dataSourceName string) (*DBModel, error) {
 
 	dbModel := &DBModel{
 		Vehicle: VehicleModel{DB: db},
+		User:    UserModel{DB: db},
+		DB:      db,
 	}
 
 	return dbModel, nil

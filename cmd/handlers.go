@@ -4,10 +4,12 @@ import "service-tracker-go/internal/models"
 
 type Handler struct {
 	vehicles *models.VehicleModel
+	users    *models.UserModel
 }
 
 func NewHandler(dbModel *models.DBModel) *Handler {
 	return &Handler{
 		vehicles: &dbModel.Vehicle,
+		users:    &dbModel.User,
 	}
 }

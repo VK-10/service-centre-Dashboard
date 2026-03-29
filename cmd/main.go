@@ -34,7 +34,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	setUpRoutes(router, h)
+	sessionStore := setupSessionStore(dbModel.DB, []byte(config.SessionSecretKey))
+
+	setUpRoutes(router, h, sessionStore)
 	slog.Info("Starting server on port", "port", config.Port)
 
 	router.Run(":" + config.Port)
