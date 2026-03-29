@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"os"
 
@@ -31,6 +32,10 @@ func Loadtemplates(router *gin.Engine) error {
 	functions := template.FuncMap{
 		"add": func(a, b int) int {
 			return a + b
+		},
+		"json": func(v interface{}) template.JS {
+			b, _ := json.Marshal(v)
+			return template.JS(b)
 		},
 	}
 
