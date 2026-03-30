@@ -23,7 +23,7 @@ func setUpRoutes(router *gin.Engine, handler *Handler, store sessions.Store) {
 	{
 		admin.GET("", handler.ServeAdminDashboard)
 		admin.POST("/vehicles/:id/status", handler.HandleOrderPut)
-		admin.DELETE("/vehicles/:id", handler.HandleVehicleDelete)
+		admin.POST("/vehicles/:id", handler.HandleVehicleDelete)
 		admin.GET("/notifications", handler.adminNotificationHandler)
 	}
 

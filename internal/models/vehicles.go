@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/teris-io/shortid"
@@ -65,7 +64,7 @@ type Vehicle struct {
 	Address      string        `gorm:"not null" json:"address"`
 	Items        []VehicleItem `gorm:"foreignKey:ServiceID" json:"items"`
 	CreatedAt    time.Time     `json:"createdAt"`
-	ChasisNumber string        `gorm:"not null" json:"chasisNumber"`
+	// ChasisNumber string        `gorm:"not null" json:"chasisNumber"`
 }
 
 type VehicleItem struct {
@@ -93,18 +92,22 @@ func (vi *VehicleItem) BeforeCreate(ctx *gorm.DB) error {
 	return nil
 }
 
+// func (v *VehicleModel) CreateVehicle(vehicle *Vehicle) error {
+// 	var existing Vehicle
+// 	err := v.DB.Where("chasis_number = ? AND status != ?", vehicle.ChasisNumber, "Ready").First(&existing).Error
+// 	if err == nil {
+// 		return fmt.Errorf("Vehicle with chasis number %s already exists", vehicle.ChasisNumber)
+// 	}
+// 	if err == gorm.ErrRecordNotFound {
+// 		return v.DB.Create(vehicle).Error
+// 	}
+
+// 	return err
+
+// }
+
 func (v *VehicleModel) CreateVehicle(vehicle *Vehicle) error {
-	var existing Vehicle
-	err := v.DB.Where("chasis_number = ? AND status != ?", vehicle.ChasisNumber, "Ready").First(&existing).Error
-	if err == nil {
-		return fmt.Errorf("Vehicle with chasis number %s already exists", vehicle.ChasisNumber)
-	}
-	if err == gorm.ErrRecordNotFound {
-		return v.DB.Create(vehicle).Error
-	}
-
-	return err
-
+	return v.DB.Create(vehicle).Error
 }
 
 func (v *VehicleModel) GetVehicle(id string) (*Vehicle, error) {

@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Handler) NotificationHandler(c *gin.Context) {
-	vehicleID := c.Query("vehicle_id")
+	vehicleID := c.Query("vehicleId")
 	if vehicleID == "" {
 		c.String(http.StatusBadRequest, "Invalid vehicle ID")
 		return

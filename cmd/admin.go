@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"service-tracker-go/internal/models"
 
@@ -76,13 +77,15 @@ func (h *Handler) ServeAdminDashboard(c *gin.Context) {
 
 func (h *Handler) HandleOrderPut(c *gin.Context) {
 	vehicleId := c.Param("id")
-	newStatus := c.Param("status")
+	newStatus := c.PostForm("status")
 
 	if err := h.vehicles.UpdateVehicleStatus(vehicleId, newStatus); err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	h.notificationManager.Notify("vehicle:"+vehicleId, "status_update")
+	//h.notificationManager.Notify("vehicle:"+vehicleId, "status_update")
+	payload := fmt.Sprintf(`{"vehicleId":"%s","status":"%s"}`, vehicleId, newStatus)
+	h.notificationManager.Notify("vehicle:"+vehicleId, payload)
 
 	c.Redirect(http.StatusSeeOther, "/admin")
 }
