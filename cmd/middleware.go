@@ -17,7 +17,7 @@ func (h *Handler) AuthMiddleware() gin.HandlerFunc {
 
 		}
 
-		user, err := h.users.GetUserByID(userId)
+		_, err := h.users.GetUserByID(userId)
 		if err != nil {
 			ClearSession(c)
 			c.Redirect(http.StatusSeeOther, "/login")

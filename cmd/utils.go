@@ -89,7 +89,7 @@ func GetSessionString(c *gin.Context, key string) string {
 	if val == nil {
 		return ""
 	}
-	strr, _ := val.string()
+	strr, _ := val.(string)
 	return strr
 }
 

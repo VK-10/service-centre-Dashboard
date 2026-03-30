@@ -64,7 +64,7 @@ type Vehicle struct {
 	Phone        string        `gorm:"not null" json:"phone"`
 	Address      string        `gorm:"not null" json:"address"`
 	Items        []VehicleItem `gorm:"foreignKey:ServiceID" json:"items"`
-	createdAt    time.Time     `json:"createdAt"`
+	CreatedAt    time.Time     `json:"createdAt"`
 	ChasisNumber string        `gorm:"not null" json:"chasisNumber"`
 }
 
@@ -111,4 +111,19 @@ func (v *VehicleModel) GetVehicle(id string) (*Vehicle, error) {
 	var vehicle Vehicle
 	err := v.DB.Preload("Items").First(&vehicle, "id = ?", id).Error // Preload issues
 	return &vehicle, err
+}
+
+func (v *VehicleModel) GetAllVehicles() ([]Vehicle, error) {
+	var vehicles []Vehicle
+	err := v.DB.Preload("Items").Order("created_at desc").Find(&vehicles).Error
+	return vehicles, err
+}
+
+func (v *VehicleModel) UpdateVehicleStatus(id string, status string) error {
+	return v.DB.Model(&Vehicle{}).Where("id = ?", id).Update("status", status).Error
+}
+
+func (v *VehicleModel) DeleteVehicle(id string) error {
+	return v.DB.Select("Items").Delete(&Vehicle{ID: id}).Error
+
 }

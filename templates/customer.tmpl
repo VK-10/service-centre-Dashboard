@@ -106,6 +106,12 @@
   }
 
   updateStatusBar("{{.Vehicle.Status}}");
+
+  const eventSrc = new EventSource(`/notifications?vehicleId={{.Vehicle.ID}}`);
+  eventSrc.onmessage = () => location.reload();
+  eventSrc.onerror = err => console.error("EventSource failed:", err);
+  
+
 </script>
 
 {{template "bottom" .}}

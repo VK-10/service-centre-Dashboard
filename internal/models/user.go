@@ -8,8 +8,8 @@ import (
 )
 
 type User struct {
-	ID       uint   `gorm:"primaryKey"`
-	Username string `gorm:uniqueIndex;not null"`
+	ID       string `gorm:"primaryKey;size:14"`
+	Username string `gorm:"uniqueIndex;not null"`
 	Password string `gorm:"not null"`
 }
 
