@@ -2,6 +2,17 @@
 
 A real-time vehicle service management system built with **Go**, **Gin**, **GORM**, and **SQLite**. Customers can submit their vehicle for service and track its status live. Admins manage all services from a protected dashboard.
 
+# Demo
+
+
+
+https://github.com/user-attachments/assets/0743e2bc-fb49-455e-b904-c7d285f90ad7
+
+
+
+
+
+
 ---
 
 ## Features
